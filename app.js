@@ -61,9 +61,9 @@ function playPluck(freq, when, gain = 0.22) {
   src.connect(g).connect(master);
   src.start(when);
 }
-function playChord(c, mode) {
+function playChord(c, mode, when) {
   const ctx = audio();
-  const t0 = ctx.currentTime + 0.03;
+  const t0 = when ?? ctx.currentTime + 0.03;
   const gap = mode === 'arp' ? 0.5 : 0.04;
   let k = 0;
   c.frets.forEach((f, i) => {
@@ -106,10 +106,14 @@ function chordSVG(c) {
 }
 
 /* ---------- LEARN ---------- */
-function lessonState(id) {
-  const l = LESSONS.find(x => x.id === id);
-  const saved = store.get('lesson:' + id, []);
-  return l.checklist.map((_, i) => !!saved[i]);
+const checkState = (key, items) => { const saved = store.get(key, []); return items.map((_, i) => !!saved[i]); };
+const lessonState = id => checkState('lesson:' + id, LESSONS.find(x => x.id === id).checklist);
+const chordHref = n => '#chords/' + encodeURIComponent(n);
+function chordRow(names) {
+  return `<div class="chord-row">${names.map(n => {
+    const c = CHORDS.find(x => x.name === n);
+    return `<a href="${chordHref(n)}" class="mini">${chordSVG(c)}<b>${esc(n)}</b></a>`;
+  }).join('')}</div>`;
 }
 function renderLearnList() {
   const done = LESSONS.filter(l => lessonState(l.id).every(Boolean)).length;
@@ -137,7 +141,7 @@ function renderLesson(id) {
     <a class="back" href="#learn">← All lessons</a>
     <h2>${l.id}. ${esc(l.title)} <small>${esc(l.time)}</small></h2>
     <div class="card prose">${l.body}</div>
-    ${l.chords ? `<div class="chord-row">${l.chords.map(n => { const c = CHORDS.find(x => x.name === n); return `<a href="#chords/${esc(n)}" class="mini">${chordSVG(c)}<b>${esc(n)}</b></a>`; }).join('')}</div>` : ''}
+    ${l.chords ? chordRow(l.chords) : ''}
     <div class="card">
       <h3>Checklist</h3>
       <ul class="checks">${l.checklist.map((t, i) => `<li><label><input type="checkbox" data-i="${i}"${st[i] ? ' checked' : ''}><span>${esc(t)}</span></label></li>`).join('')}</ul>
@@ -184,6 +188,63 @@ $('#chord-cats').addEventListener('click', e => {
 $('#chord-grid').addEventListener('click', e => {
   const b = e.target.closest('button[data-play]');
   if (b) playChord(CHORDS.find(c => c.name === b.dataset.play), b.dataset.mode);
+});
+
+/* ---------- SONGS ---------- */
+function renderSongsList() {
+  $('#songs-list').innerHTML = SONGS.map(s => {
+    const n = checkState('song:' + s.id, s.checklist).filter(Boolean).length;
+    return `<a class="card lesson-card" href="#songs/${esc(s.id)}">
+      <span class="num">🎵</span>
+      <span class="lc-body"><b>${esc(s.title)} <small>· ${esc(s.artist)}</small></b><small>${esc(s.summary)}</small><small>${esc(s.level)}</small></span>
+      <span class="lc-meta">${n}/${s.checklist.length}</span>
+    </a>`;
+  }).join('');
+}
+function renderSong(id) {
+  const s = SONGS.find(x => x.id === id);
+  if (!s) { location.hash = '#songs'; return; }
+  const st = checkState('song:' + id, s.checklist);
+  const easyOnly = s.easy.filter(n => !s.chords.includes(n));
+  const el = $('#songs-detail');
+  el.innerHTML = `
+    <a class="back" href="#songs">← All songs</a>
+    <h2>${esc(s.title)} <small>${esc(s.artist)} · ${esc(s.album)}</small></h2>
+    <p class="hint">${esc(s.level)} · target about ${s.targetBpm} BPM</p>
+    <div class="card prose">${s.body}</div>
+    <h4>Chords</h4>
+    ${chordRow(s.chords)}
+    <h4>Easier shapes to start with</h4>
+    ${chordRow(easyOnly)}
+    <div class="card">
+      <h3>Practise it</h3>
+      <div class="row">
+        <button class="btn primary" data-hear="${esc(s.id)}">▶ Hear the loop</button>
+        <button class="btn" data-bpm="${s.startBpm}">Metronome at ${s.startBpm} BPM</button>
+        <button class="btn" data-bpm="${s.targetBpm}">Metronome at ${s.targetBpm} BPM</button>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Checklist</h3>
+      <ul class="checks">${s.checklist.map((t, i) => `<li><label><input type="checkbox" data-i="${i}"${st[i] ? ' checked' : ''}><span>${esc(t)}</span></label></li>`).join('')}</ul>
+    </div>`;
+  $$('input[type=checkbox]', el).forEach(cb => cb.addEventListener('change', () => {
+    const cur = checkState('song:' + id, s.checklist);
+    cur[+cb.dataset.i] = cb.checked;
+    store.set('song:' + id, cur);
+  }));
+  window.scrollTo(0, 0);
+}
+$('#songs-detail').addEventListener('click', e => {
+  const hear = e.target.closest('button[data-hear]');
+  if (hear) {
+    const s = SONGS.find(x => x.id === hear.dataset.hear);
+    const t0 = audio().currentTime + 0.05, bar = 4 * 60 / s.targetBpm;
+    s.chords.forEach((n, i) => playChord(CHORDS.find(c => c.name === n), 'strum', t0 + i * bar));
+    return;
+  }
+  const bpm = e.target.closest('button[data-bpm]');
+  if (bpm) { setBpm(+bpm.dataset.bpm); location.hash = '#metronome'; }
 });
 
 /* ---------- TUNER ---------- */
@@ -539,7 +600,7 @@ function initFretboard() {
 }
 
 /* ---------- router ---------- */
-const VIEWS = ['learn', 'chords', 'tuner', 'metronome', 'practice', 'fretboard'];
+const VIEWS = ['learn', 'chords', 'songs', 'tuner', 'metronome', 'practice', 'fretboard'];
 function route() {
   let hash = location.hash.slice(1);
   try { hash = decodeURIComponent(hash); } catch { /* malformed escape: use the raw hash */ }
@@ -554,6 +615,9 @@ function route() {
     const id = parseInt(arg, 10);
     $('#learn-list').hidden = !!id; $('#learn-detail').hidden = !id;
     if (id) renderLesson(id); else { renderLearnList(); window.scrollTo(0, 0); }
+  } else if (view === 'songs') {
+    $('#songs-list').hidden = !!arg; $('#songs-detail').hidden = !arg;
+    if (arg) renderSong(arg); else renderSongsList();
   } else if (view === 'chords') renderChords(arg);
   else if (view === 'practice') renderPractice();
   if (view !== 'chords' || !arg) if (view !== 'learn') window.scrollTo(0, 0);

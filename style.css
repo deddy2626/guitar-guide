@@ -83,8 +83,8 @@ select {
   padding-bottom: env(safe-area-inset-bottom);
 }
 .tabs a {
-  flex: 1 1 0; max-width: 126px; display: flex; flex-direction: column; align-items: center; gap: 1px;
-  padding: 8px 2px 8px; font-size: .72rem; color: var(--muted); text-decoration: none; position: relative;
+  flex: 1 1 0; max-width: 108px; display: flex; flex-direction: column; align-items: center; gap: 1px;
+  padding: 8px 0 8px; font-size: .68rem; color: var(--muted); text-decoration: none; position: relative;
 }
 .tabs a span { font-size: 1.25rem; line-height: 1.2; }
 .tabs a.active { color: var(--accent); font-weight: 700; }

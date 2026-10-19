@@ -41,12 +41,22 @@ const CHORDS = [
     tip: 'Like G, but with the pinky replaced by the index on the thin e string.' },
   { name: 'Fmaj7', full: 'F major 7 (easy F)', cat: 'seventh', frets: [-1, -1, 3, 2, 1, 0], fingers: [0, 0, 3, 2, 1, 0],
     tip: 'A friendly stand-in for the barre F chord while you build strength.' },
+
+  { name: 'B (easy)', full: 'B major, top four strings', cat: 'barre', frets: [-1, -1, 4, 4, 4, 2], fingers: [0, 0, 3, 3, 3, 1],
+    tip: 'A mini barre: flatten your ring finger across three strings. Much easier than the full B.' },
+  { name: 'Cm (easy)', full: 'C minor, top four strings', cat: 'barre', frets: [-1, -1, 5, 5, 4, 3], fingers: [0, 0, 3, 4, 2, 1],
+    tip: 'Only the four thinnest strings. Same notes as the full Cm, with less stretch.' },
+  { name: 'B', full: 'B major (barre)', cat: 'barre', frets: [-1, 2, 4, 4, 4, 2], fingers: [0, 1, 3, 3, 3, 1],
+    tip: 'The open A shape moved up two frets. Index finger bars fret 2 on strings 5 to 1.' },
+  { name: 'Cm', full: 'C minor (barre)', cat: 'barre', frets: [-1, 3, 5, 5, 4, 3], fingers: [0, 1, 3, 4, 2, 1],
+    tip: 'The open Am shape moved up three frets. Index finger bars fret 3 on strings 5 to 1.' },
 ];
 
 const CHORD_CATS = [
   { id: 'first', label: 'First chords' },
   { id: 'power', label: 'Power chords' },
   { id: 'seventh', label: '7ths' },
+  { id: 'barre', label: 'Barre' },
 ];
 
 const LESSONS = [
@@ -196,10 +206,29 @@ strum:  D  D  U     U  D  U</pre>
     checklist: ['I can play E5, A5 and D5 cleanly', 'I can slide the power chord shape up the neck', 'I tried palm muting'],
   },
   {
-    id: 9, title: 'Play your first songs', time: 'ongoing',
+    id: 9, title: 'Your first barre chords', time: '15 min',
+    summary: 'One finger acts as a movable nut. Hard at first, and that\'s normal.',
+    body: `
+      <p>A barre chord uses one finger, usually the index, pressed flat across several strings, so your other fingers can make a chord shape. Slide the whole shape up the neck and you get a different chord. Expect buzzing and a tired hand for a few weeks. Nearly everyone goes through this.</p>
+      <h4>Start with the mini versions</h4>
+      <p>Before the full six-string barre, play only the top four strings: <a class="chip" href="#chords/B%20(easy)">B (easy)</a> and <a class="chip" href="#chords/Cm%20(easy)">Cm (easy)</a>. They sound very close to the real thing and cost far less effort.</p>
+      <h4>Build the full barre</h4>
+      <ol>
+        <li>Lay your index finger flat across the strings, just behind the fret. For <a class="chip" href="#chords/B">B</a> that's fret 2, strings 5 to 1.</li>
+        <li>Roll the finger slightly onto its bony edge (toward the thumb side) so the soft pad doesn't mute strings.</li>
+        <li>Add the other fingers on top. The B chord is the open A shape moved up two frets, and <a class="chip" href="#chords/Cm">Cm</a> is the open Am shape moved up three frets.</li>
+        <li>Keep your thumb low behind the neck and pull gently with your arm. Don't just squeeze with your thumb.</li>
+      </ol>
+      <p>Pick each string one at a time. If one is buzzing, move the barre finger closer to the fret, or shift it so a gap in your finger (the creases) isn't over a string.</p>
+      <p class="hint">Short sessions, and rest when your hand tires. Stop if you feel pain in your wrist. A barre can take weeks to come good, and that's normal.</p>`,
+    chords: ['B (easy)', 'Cm (easy)', 'B', 'Cm'],
+    checklist: ['I can play B (easy) and Cm (easy) with all four strings ringing', 'I can hold the full B barre with at least four clear notes', 'I can change between G and B (easy) in time'],
+  },
+  {
+    id: 10, title: 'Play your first songs', time: 'ongoing',
     summary: 'This is why you picked up a guitar.',
     body: `
-      <p>Search for "<i>song name</i> easy chords" or "<i>song name</i> guitar tab". Pick songs using <b>3–4 chords you already know</b>. Learn one section at a time (verse, then chorus) and play along slowly with the metronome.</p>
+      <p>Open the <a href="#songs">Songs</a> tab for a first song with a practice plan. For others, search for "<i>song name</i> easy chords" or "<i>song name</i> guitar tab". Pick songs using <b>3–4 chords you already know</b>. Learn one section at a time (verse, then chorus) and play along slowly with the metronome.</p>
       <h4>Easy riffs to try</h4>
       <p>Single-note riffs are a great way to build finger independence. The Seven Nation Army riff, for instance, can be played on one string.</p>
       <h4>When you're stuck</h4>
@@ -219,4 +248,32 @@ const ROUTINE = [
   { id: 'chords', label: 'Chord changes', min: 5, hint: 'One-minute drill on a pair of chords.' },
   { id: 'strum', label: 'Strumming with the metronome', min: 3, hint: 'A pattern on one chord at 60–80 BPM.' },
   { id: 'fun', label: 'Play something fun', min: 3, hint: 'A riff or song, just for enjoyment.' },
+];
+
+const SONGS = [
+  {
+    id: 'creep', title: 'Creep', artist: 'Radiohead', album: 'Pablo Honey',
+    level: 'Beginner+ · needs barre chords',
+    startBpm: 60, targetBpm: 92,
+    chords: ['G', 'B', 'C', 'Cm'],
+    easy: ['G', 'B (easy)', 'C', 'Cm (easy)'],
+    lessons: [5, 7, 9],
+    summary: 'Four chords, a famous rhythm, and a quiet-to-loud shape that is great practice.',
+    body: `
+      <p>"Creep" is built on a loop of four chords: <b>G, B, C, Cm</b>. G and C are open chords you may already know. B and Cm are barre chords, so do <a href="#learn/9">lesson 9</a> first. The mini <b>B (easy)</b> and <b>Cm (easy)</b> shapes are a perfectly good way to start.</p>
+      <p class="hint">This page covers the chords and a practice plan only. For the exact strumming, the lead lines and the lyrics, find a verified tab and play along with the recording.</p>
+      <h4>The loop</h4>
+      <p class="big-line">G · B · C · Cm</p>
+      <p>To practise it, give each chord one bar (4 beats) and play it over and over.</p>
+      <h4>Practice plan</h4>
+      <ol>
+        <li><b>Each chord alone.</b> Make the shape, then pick the strings one at a time and fix any buzz.</li>
+        <li><b>Change drills.</b> Do the <a href="#learn/7">one-minute drill</a> on G ↔ B, B ↔ C and C ↔ Cm. The C ↔ Cm change is a small move. Keep the shape and shift your fingers together.</li>
+        <li><b>The loop at a slow tempo.</b> Set the metronome to 60 BPM and play one downstroke per beat, four per chord. Don't speed up until you can do it without stopping.</li>
+        <li><b>Raise the tempo</b> in steps of 5 BPM towards about 90.</li>
+        <li><b>Play along with the recording,</b> first with the easy shapes, then the full barres.</li>
+        <li><b>Add dynamics.</b> The song goes from quiet to loud. Play it softly on a clean amp sound, then dig in harder (or add some gain) for the big sections.</li>
+      </ol>`,
+    checklist: ['I can play G and C cleanly', 'I can play B (easy) or the full B barre', 'I can play Cm (easy) or the full Cm barre', 'I can play the whole loop at 60 BPM without stopping', 'I can play the loop at around 90 BPM', 'I played along with the recording'],
+  },
 ];
