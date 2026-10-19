@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#16130f">
+<title>Fretwise – Learn Guitar</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="top">
+  <h1>Fretwise</h1>
+  <p class="sub">Beginner guitar · standard tuning · electric</p>
+</header>
+
+<main>
+  <!-- LEARN -->
+  <section id="view-learn" class="view" hidden>
+    <div id="learn-list"></div>
+    <div id="learn-detail" hidden></div>
+  </section>
+
+  <!-- CHORDS -->
+  <section id="view-chords" class="view" hidden>
+    <div class="seg" id="chord-cats" role="tablist"></div>
+    <p class="hint">Tap <b>Strum</b> to hear it. Tap <b>One by one</b> to hear each string separately, which is how you find buzzing or muted notes in your own playing.</p>
+    <div id="chord-grid" class="chord-grid"></div>
+  </section>
+
+  <!-- TUNER -->
+  <section id="view-tuner" class="view" hidden>
+    <div class="card tuner">
+      <div class="tuner-note" id="tuner-note">–</div>
+      <div class="tuner-target" id="tuner-target">Tap start, then pluck one string</div>
+      <div class="meter" aria-hidden="true">
+        <div class="zone"></div>
+        <div class="needle" id="tuner-needle"></div>
+      </div>
+      <div class="meter-labels"><span>flat ♭</span><span>in tune</span><span>sharp ♯</span></div>
+      <div class="tuner-status" id="tuner-status" aria-live="polite"></div>
+      <button class="btn primary" id="tuner-toggle">Start tuner</button>
+    </div>
+    <div class="card">
+      <h3>Reference tones</h3>
+      <p class="hint">Tap a string to hear its pitch, then tune your string until it matches. Tap again to stop.</p>
+      <div class="string-btns" id="ref-strings"></div>
+    </div>
+    <div class="card tips">
+      <h3>Tuning tips</h3>
+      <ul>
+        <li>Tune from the thickest string (low E) to the thinnest.</li>
+        <li>Always tune <b>up</b> to the note: if you go past it, drop below and come back up.</li>
+        <li>Electric guitars are quiet unplugged. Hold your phone near the guitar body and pluck firmly, or use the amp's volume at a low level.</li>
+        <li>New strings stretch and drift. Re-check the tuning every time you sit down.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- METRONOME -->
+  <section id="view-metronome" class="view" hidden>
+    <div class="card metro">
+      <div class="bpm" id="bpm-display">80</div>
+      <div class="bpm-label">BPM</div>
+      <input type="range" id="bpm-range" min="40" max="208" value="80" aria-label="Tempo">
+      <div class="row center">
+        <button class="btn" id="bpm-minus" aria-label="Slower">−</button>
+        <button class="btn" id="bpm-tap">Tap tempo</button>
+        <button class="btn" id="bpm-plus" aria-label="Faster">+</button>
+      </div>
+      <div class="beats" id="beats" aria-hidden="true"></div>
+      <div class="row center">
+        <label>Beats per bar
+          <select id="metro-beats"><option>2</option><option>3</option><option selected>4</option><option>5</option><option>6</option></select>
+        </label>
+      </div>
+      <button class="btn primary" id="metro-toggle">Start</button>
+      <p class="hint">Start around 60–70 BPM. Speed is the last thing to chase. Clean and in time first.</p>
+    </div>
+  </section>
+
+  <!-- PRACTICE -->
+  <section id="view-practice" class="view" hidden>
+    <div class="card stats">
+      <div><div class="big" id="stat-streak">0</div><div class="lbl">day streak</div></div>
+      <div><div class="big" id="stat-today">0</div><div class="lbl">min today</div></div>
+      <div><div class="big" id="stat-week">0</div><div class="lbl">min this week</div></div>
+    </div>
+    <div class="card"><div class="week" id="week-bars"></div></div>
+    <div class="card">
+      <h3>Today's 15-minute routine</h3>
+      <p class="hint">15 minutes every day beats 2 hours once a week. Your fingers learn while you sleep.</p>
+      <ul class="checks" id="routine"></ul>
+    </div>
+    <div class="card timer">
+      <h3>Practice timer</h3>
+      <div class="timer-display" id="timer-display">15:00</div>
+      <div class="row center">
+        <label>Minutes
+          <select id="timer-len"><option>5</option><option>10</option><option selected>15</option><option>20</option><option>30</option></select>
+        </label>
+      </div>
+      <button class="btn primary" id="timer-toggle">Start</button>
+      <p class="hint" id="timer-msg">Stopping early logs the time you played.</p>
+    </div>
+  </section>
+
+  <!-- FRETBOARD -->
+  <section id="view-fretboard" class="view" hidden>
+    <div class="card">
+      <h3>Name that note</h3>
+      <div class="seg" id="fb-level" role="tablist">
+        <button data-level="open" class="on">Open strings</button>
+        <button data-level="five">Frets 0–5</button>
+        <button data-level="twelve">Frets 0–12</button>
+      </div>
+      <div class="fb-wrap"><div id="fb-board"></div></div>
+      <div class="fb-q" id="fb-q"></div>
+      <div class="note-btns" id="fb-notes"></div>
+      <div class="fb-feedback" id="fb-feedback" aria-live="polite"></div>
+      <div class="fb-score" id="fb-score"></div>
+    </div>
+    <div class="card">
+      <h3>Note map</h3>
+      <p class="hint">Open strings low to high: <b>E A D G B E</b> — <i>"Eddie Ate Dynamite, Good Bye Eddie."</i> Each fret up is one semitone, and there is no sharp between E–F or B–C.</p>
+      <details>
+        <summary>Show every note, frets 0–12</summary>
+        <div class="map-wrap"><div id="note-map"></div></div>
+      </details>
+    </div>
+  </section>
+</main>
+
+<nav class="tabs" id="tabs" aria-label="Sections">
+  <a href="#learn" data-view="learn"><span>📖</span>Learn</a>
+  <a href="#chords" data-view="chords"><span>🎸</span>Chords</a>
+  <a href="#tuner" data-view="tuner"><span>🎯</span>Tuner</a>
+  <a href="#metronome" data-view="metronome"><span>⏱️</span>Metro</a>
+  <a href="#practice" data-view="practice"><span>📅</span>Practice</a>
+  <a href="#fretboard" data-view="fretboard"><span>🧠</span>Notes</a>
+</nav>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
