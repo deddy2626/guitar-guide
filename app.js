@@ -205,17 +205,16 @@ function renderSong(id) {
   const s = SONGS.find(x => x.id === id);
   if (!s) { location.hash = '#songs'; return; }
   const st = checkState('song:' + id, s.checklist);
-  const easyOnly = s.easy.filter(n => !s.chords.includes(n));
+  const easyOnly = (s.easy || []).filter(n => !s.chords.includes(n));
   const el = $('#songs-detail');
   el.innerHTML = `
     <a class="back" href="#songs">← All songs</a>
     <h2>${esc(s.title)} <small>${esc(s.artist)} · ${esc(s.album)}</small></h2>
-    <p class="hint">${esc(s.level)} · target about ${s.targetBpm} BPM</p>
+    <p class="hint">${esc(s.level)} · target about ${s.targetBpm} BPM${s.tempoNote ? ' ' + esc(s.tempoNote) : ''}</p>
     <div class="card prose">${s.body}</div>
     <h4>Chords</h4>
     ${chordRow(s.chords)}
-    <h4>Easier shapes to start with</h4>
-    ${chordRow(easyOnly)}
+    ${easyOnly.length ? `<h4>Easier shapes to start with</h4>${chordRow(easyOnly)}` : ''}
     <div class="card">
       <h3>Practise it</h3>
       <div class="row">

@@ -3,8 +3,8 @@
 A beginner guitar learning app, built for an electric guitar in standard tuning (E A D G B E). Plain HTML/CSS/JS with no build step and no dependencies. Progress is saved in your browser only.
 
 - **Learn**: 11-lesson path from "parts of the guitar" to barre chords, first songs and lead guitar basics, with checklists
-- **Chords**: 22 chord diagrams (first chords, power chords, 7ths, barre) you can hear strummed or one string at a time
-- **Songs**: a first song ("Creep") with chords, easier shapes, a practice plan and tempo buttons
+- **Chords**: 23 chord diagrams (first chords, power chords, 7ths, barre) you can hear strummed or one string at a time
+- **Songs**: "Creep" and "Fake Plastic Trees" with chords, practice plans, lead-technique notes and tempo buttons
 - **Tuner**: microphone tuner for all six strings, plus reference tones
 - **Metro**: metronome with tap tempo and accented first beat
 - **Practice**: daily 15-minute routine, timer, minutes log and streak

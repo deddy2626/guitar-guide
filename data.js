@@ -30,6 +30,8 @@ const CHORDS = [
     tip: 'Root on the low E string at fret 3. This is the movable shape: slide it anywhere.' },
   { name: 'C5', full: 'C power chord', cat: 'power', frets: [-1, 3, 5, 5, -1, -1], fingers: [0, 1, 3, 4, 0, 0],
     tip: 'Root on the A string at fret 3. The same shape slides up and down the neck.' },
+  { name: 'F#5', full: 'F\u266f power chord', cat: 'power', frets: [2, 4, 4, -1, -1, -1], fingers: [1, 3, 4, 0, 0, 0],
+    tip: 'Root on the low E string at fret 2. The same movable shape as G5, two frets lower.' },
 
   { name: 'E7', full: 'E dominant 7', cat: 'seventh', frets: [0, 2, 0, 1, 0, 0], fingers: [0, 2, 0, 1, 0, 0],
     tip: 'Lift a finger off E and it turns bluesy.' },
@@ -135,8 +137,19 @@ G|-2---------|
 D|-----------|
 A|-----------|
 E|-----------|</pre>
-      <p class="hint">Read left to right. This tab means: G string fret 2, B string fret 1, then the open e string.</p>`,
-    checklist: ['I can read which string and fret a dot means', 'I know × and ○ on a diagram', 'I can read a simple tab'],
+      <p class="hint">Read left to right. This tab means: G string fret 2, B string fret 1, then the open e string.</p>
+      <h4>Symbols you'll see in tabs</h4>
+      <ul>
+        <li><code>/</code> slide up &nbsp;·&nbsp; <code>&#92;</code> slide down</li>
+        <li><code>h</code> hammer-on: <code>5h7</code> is fret 5, then hammer a finger onto fret 7</li>
+        <li><code>p</code> pull-off: <code>7p5</code> is fret 7, then pull off to fret 5</li>
+        <li><code>b</code> bend: <code>16b18</code> is fret 16 bent up until it sounds like fret 18</li>
+        <li><code>r</code> release: let a bent string back down</li>
+        <li><code>x</code> muted note: a dead, percussive sound</li>
+        <li><code>~</code> vibrato</li>
+      </ul>
+      <p class="hint">Lesson 11 shows how to play these.</p>`,
+    checklist: ['I can read which string and fret a dot means', 'I know × and ○ on a diagram', 'I can read a simple tab', 'I know what / \\ h p b r x ~ mean in a tab'],
   },
   {
     id: 5, title: 'Your first chords', time: '15 min',
@@ -317,6 +330,45 @@ const SONGS = [
       </ul>
       <p>Then work through the tab one or two bars at a time, at about 50% speed. Listen to the record for the bends, vibrato and dynamics that tabs leave out.</p>`,
     checklist: ['I can play G and C cleanly', 'I can play B (easy) or the full B barre', 'I can play Cm (easy) or the full Cm barre', 'I can play the whole loop at 60 BPM without stopping', 'I can play the loop at around 90 BPM', 'I played along with the recording', 'I can play the E minor pentatonic open position cleanly at 60 BPM', 'I learned one bar of the lead from a verified tab at slow speed'],
+  },
+  {
+    id: 'fake-plastic-trees', title: 'Fake Plastic Trees', artist: 'Radiohead', album: 'The Bends',
+    level: 'Intermediate · power chords, bends and vibrato',
+    startBpm: 50, targetBpm: 73, tempoNote: '(estimate)',
+    chords: ['A5', 'F#5', 'E5'],
+    easy: [],
+    lessons: [8, 11],
+    summary: 'A slow, big-feeling song. The version in your tutorial uses power chords, an octave climb and high bends.',
+    body: `
+      <p><b>Heads up:</b> the chords published for this song disagree. Some charts are in D major, others are built around A with D and Bm, and sites give the same sounds different names. So treat this page as a practice guide for the <b>power-chord version in the tutorial video you're following</b>, not as the definitive chart. Check it against the recording by ear.</p>
+      <h4>The shapes in the video</h4>
+      <ul>
+        <li><a class="chip" href="#chords/A5">A5</a>: A string open, D string fret 2, G string fret 2.</li>
+        <li><a class="chip" href="#chords/F%235">F♯5</a>: E string fret 2, A string fret 4, D string fret 4. It's the same movable shape as G5.</li>
+        <li><b>E5</b>: the movable power chord with its root on the A string at fret 7 (A string fret 7, D string fret 9). That is higher than the open <a class="chip" href="#chords/E5">E5</a> in the Chords tab, which "Hear the loop" uses.</li>
+      </ul>
+      <p>These match simpler charts that list A, F♯m and E.</p>
+      <h4>Tempo and strumming</h4>
+      <p>The song is in 4/4 and slow. Crowd-sourced figures put the recording at roughly 70–75 BPM, so check it yourself against the track. The video's strumming is <b>D D U U D U</b> from <a href="#learn/6">lesson 6</a>.</p>
+      <h4>Practice plan</h4>
+      <ol>
+        <li><b>Each shape alone.</b> Pick the strings one at a time and fix any buzz. Mute the strings you aren't playing.</li>
+        <li><b>Change drills.</b> A5 ↔ F♯5, F♯5 ↔ E5 and E5 ↔ A5 with the <a href="#learn/7">one-minute drill</a>. The F♯5 shape slides like in <a href="#learn/8">lesson 8</a>.</li>
+        <li><b>Strum D D U U D U</b> on each chord at 50 BPM, one bar per chord.</li>
+        <li><b>Raise the tempo</b> in steps of 5 BPM towards the recording.</li>
+        <li><b>Play along</b> with the recording once it feels easy.</li>
+      </ol>`,
+    lead: `
+      <h4>The lead techniques in the tutorial</h4>
+      <p>I haven't written out the tab. Learn it from the video's own tab, one or two bars at a time, with the video at half speed. These are the skills it asks for:</p>
+      <ul>
+        <li><b>Whole-step bends.</b> <code>16b18</code> means fret 16, bent until it sounds like fret 18. Play fret 18 first so you know the target, then bend fret 16 to match.</li>
+        <li><b>Vibrato</b> (<code>~</code>) on held notes.</li>
+        <li><b>The octave shape with a muted middle string.</b> The <code>x</code> marks are the muted string. Your index finger frets the lower note and lightly touches the string above it, and your ring finger takes the note two frets higher on the next string.</li>
+        <li><b>High positions,</b> around frets 14–19. Count the frets on your guitar to check you can reach them.</li>
+      </ul>
+      <p>See <a href="#learn/4">lesson 4</a> for the tab symbols and <a href="#learn/11">lesson 11</a> for the techniques.</p>`,
+    checklist: ['I can play A5, F♯5 and E5 cleanly', 'I can change between them in time at 50 BPM', 'I can play D D U U D U on a power chord at 50 BPM', 'I can play the loop at around 70 BPM', 'I can play the octave shape with the middle string muted', 'I can play a clean whole-step bend (fret 16 to the pitch of fret 18)', 'I learned one bar of the lead at half speed'],
   },
 ];
 
