@@ -240,6 +240,38 @@ strum:  D  D  U     U  D  U</pre>
       </ul>`,
     checklist: ['I picked a song with 3–4 chords', 'I can play the verse in time at a slow tempo', 'I played along with the original track'],
   },
+  {
+    id: 11, title: 'Lead guitar basics', time: '20 min',
+    summary: 'Single notes, the pentatonic scale and the techniques behind most leads.',
+    body: `
+      <p>Rhythm guitar plays chords. <b>Lead</b> guitar plays single notes: melodies, licks and solos. To play a song's lead lines you need clean single notes, a few techniques and a map of where the notes are.</p>
+      <h4>1. Clean single notes</h4>
+      <ul>
+        <li>Press with an arched fingertip just behind the fret so only the string you want rings.</li>
+        <li>Use <b>alternate picking</b>: down, up, down, up, with the movement coming from your wrist.</li>
+        <li>Start with the <a href="#metronome">metronome</a> at 60 BPM, one note per click.</li>
+      </ul>
+      <h4>2. A scale shape to call home</h4>
+      <p>Open the <a href="#fretboard">Notes</a> tab and find <b>Scale shapes</b>. Start with the <b>E minor pentatonic</b>, open position (frets 0–3). Play it up and down, naming each note out loud. The loop in <a href="#songs/creep">Creep</a> is in G major, and E minor pentatonic (E G A B D) is the matching "home" scale for leads over it.</p>
+      <h4>3. Core techniques</h4>
+      <ul>
+        <li><b>Hammer-on:</b> pick a fretted note, then slam another finger down on a higher fret of the same string, without picking again.</li>
+        <li><b>Pull-off:</b> the reverse. Pluck the string sideways as you lift off, leaving the lower note ringing.</li>
+        <li><b>Slide:</b> keep the pressure on and glide to another fret.</li>
+        <li><b>Bend:</b> push the string up toward the ceiling with your ring finger, supported by the fingers behind it. A <i>whole-step</i> bend should sound like the note 2 frets higher. Check this by playing that fret first.</li>
+        <li><b>Vibrato:</b> a small, steady shake of a held note.</li>
+        <li><b>Palm muting</b> and short, choppy muted strums are used a lot for the harder, noisier parts of rock songs.</li>
+      </ul>
+      <h4>4. Learning a lead from a tab</h4>
+      <ol>
+        <li>Find a verified tab. A site or app that lets you slow the playback down and loop a bar, like Songsterr, is ideal.</li>
+        <li>Learn <b>one or two bars</b> at a time, at about half speed. Say the fret numbers out loud first.</li>
+        <li>Loop the bars. Only speed up after five clean repeats in a row.</li>
+        <li>Listen to the original recording a lot. Bends, vibrato and dynamics are rarely written in a tab, and they are most of the feel.</li>
+      </ol>
+      <p class="hint">Leads usually sound better with some gain and your bridge pickup. Keep the volume low enough to hear your own mistakes.</p>`,
+    checklist: ['I can play the E minor pentatonic, open position, up and down at 60 BPM', 'I can play a clean hammer-on and a clean pull-off', 'I tried a whole-step bend and matched the pitch of the note 2 frets higher', 'I learned one bar of a lead from a tab at slow speed'],
+  },
 ];
 
 const ROUTINE = [
@@ -274,6 +306,29 @@ const SONGS = [
         <li><b>Play along with the recording,</b> first with the easy shapes, then the full barres.</li>
         <li><b>Add dynamics.</b> The song goes from quiet to loud. Play it softly on a clean amp sound, then dig in harder (or add some gain) for the big sections.</li>
       </ol>`,
-    checklist: ['I can play G and C cleanly', 'I can play B (easy) or the full B barre', 'I can play Cm (easy) or the full Cm barre', 'I can play the whole loop at 60 BPM without stopping', 'I can play the loop at around 90 BPM', 'I played along with the recording'],
+    lead: `
+      <h4>Learning the lead parts</h4>
+      <p>I haven't written out the note-by-note lead tab here. Find a verified tab (Songsterr, for example, can slow it down and loop a bar) and learn it in short pieces. Get these skills ready first:</p>
+      <ul>
+        <li><b>Clean single notes</b> with alternate picking, in time with the metronome.</li>
+        <li><b>Hammer-ons, pull-offs, slides and bends.</b> See <a href="#learn/11">lesson 11</a>.</li>
+        <li><b>The E minor pentatonic shape.</b> The loop is in G major, so this is the home scale to know. Find it in the <a href="#fretboard">Notes</a> tab under Scale shapes.</li>
+        <li><b>The loud, choppy hits</b> that come in before the big sections. Listen for them on the recording. They're a rhythm technique: strum hard, then immediately relax your fretting hand to deaden the strings.</li>
+      </ul>
+      <p>Then work through the tab one or two bars at a time, at about 50% speed. Listen to the record for the bends, vibrato and dynamics that tabs leave out.</p>`,
+    checklist: ['I can play G and C cleanly', 'I can play B (easy) or the full B barre', 'I can play Cm (easy) or the full Cm barre', 'I can play the whole loop at 60 BPM without stopping', 'I can play the loop at around 90 BPM', 'I played along with the recording', 'I can play the E minor pentatonic open position cleanly at 60 BPM', 'I learned one bar of the lead from a verified tab at slow speed'],
   },
 ];
+
+// Scale shown in the Notes tab. Positions are fret windows; the notes inside are worked out from the pitch classes.
+const SCALE = {
+  name: 'E minor pentatonic', root: 4, pcs: [4, 7, 9, 11, 2],
+  positions: [
+    { label: 'Open (0–3)', range: [0, 3] },
+    { label: 'Frets 2–5', range: [2, 5] },
+    { label: 'Frets 4–8', range: [4, 8] },
+    { label: 'Frets 7–10', range: [7, 10] },
+    { label: 'Frets 9–12', range: [9, 12] },
+    { label: 'All', range: [0, 12] },
+  ],
+};

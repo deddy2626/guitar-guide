@@ -182,7 +182,8 @@ pre.tab { background: var(--card2); border-radius: 10px; padding: 12px; overflow
 
 /* fretboard */
 .fb-wrap { overflow-x: auto; margin: 0 -4px 8px; }
-.fb-wrap #fb-board { min-width: 640px; }
+.fb-wrap #fb-board, .fb-wrap #scale-board { min-width: 640px; }
+#scale-play { margin-top: 10px; }
 .fretboard { width: 100%; height: auto; display: block; }
 .fretboard .fret { stroke: var(--line); stroke-width: 1.5; }
 .fretboard .nut { stroke: var(--text); stroke-width: 4; }
@@ -191,6 +192,10 @@ pre.tab { background: var(--card2); border-radius: 10px; padding: 12px; overflow
 .fretboard .sname { fill: var(--muted); font: 600 12px system-ui; text-anchor: middle; }
 .fretboard .fnum { fill: var(--muted); font: 11px system-ui; text-anchor: middle; }
 .fretboard .hl { fill: var(--accent); }
+.fretboard .sd { fill: var(--card2); stroke: var(--accent); stroke-width: 1.5; }
+.fretboard .sd.root { fill: var(--accent); }
+.fretboard .sdt { fill: var(--text); font: 700 9px system-ui; text-anchor: middle; }
+.fretboard .sdt.root { fill: var(--accent-ink); }
 .fretboard .hlt { fill: var(--accent-ink); font: 700 10px system-ui; text-anchor: middle; }
 .fb-q { font-weight: 600; text-align: center; margin: 4px 0 10px; }
 .note-btns { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; }

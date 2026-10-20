@@ -224,6 +224,7 @@ function renderSong(id) {
         <button class="btn" data-bpm="${s.targetBpm}">Metronome at ${s.targetBpm} BPM</button>
       </div>
     </div>
+    ${s.lead ? `<div class="card prose">${s.lead}</div>` : ''}
     <div class="card">
       <h3>Checklist</h3>
       <ul class="checks">${s.checklist.map((t, i) => `<li><label><input type="checkbox" data-i="${i}"${st[i] ? ' checked' : ''}><span>${esc(t)}</span></label></li>`).join('')}</ul>
@@ -529,7 +530,7 @@ $('#timer-toggle').addEventListener('click', () => {
 
 /* ---------- FRETBOARD TRAINER ---------- */
 const fb = { level: 'open', cur: null, right: 0, total: 0, locked: false };
-function fretboardSVG(hl) {
+function fretboardSVG(hl, dots = []) {
   const x0 = 54, fw = 48, y0 = 22, sh = 24, frets = 12;
   const W = x0 + frets * fw + 12, H = y0 + 5 * sh + 36;
   let s = `<svg viewBox="0 0 ${W} ${H}" class="fretboard" role="img" aria-label="Guitar fretboard">`;
@@ -542,8 +543,13 @@ function fretboardSVG(hl) {
     s += `<text x="${x0 - 32}" y="${y + 4}" class="sname">${STRINGS[i].name}</text>`;
   }
   for (let f = 1; f <= frets; f++) s += `<text x="${x0 + (f - 0.5) * fw}" y="${y0 + 5 * sh + 22}" class="fnum">${f}</text>`;
+  const at = (str, fret) => ({ x: fret === 0 ? x0 - 11 : x0 + (fret - 0.5) * fw, y: y0 + (5 - str) * sh });
+  dots.forEach(d => {
+    const { x, y } = at(d.s, d.f), cls = d.root ? ' root' : '';
+    s += `<circle cx="${x}" cy="${y}" r="9.5" class="sd${cls}"/><text x="${x}" y="${y + 3.5}" class="sdt${cls}">${esc(d.label)}</text>`;
+  });
   if (hl) {
-    const x = hl.f === 0 ? x0 - 11 : x0 + (hl.f - 0.5) * fw, y = y0 + (5 - hl.s) * sh;
+    const { x, y } = at(hl.s, hl.f);
     s += `<circle cx="${x}" cy="${y}" r="9.5" class="hl"/>`;
     if (hl.label) s += `<text x="${x}" y="${y + 4}" class="hlt">${esc(hl.label)}</text>`;
   }
@@ -599,6 +605,34 @@ function initFretboard() {
   nextQuestion();
 }
 
+/* ---------- SCALE SHAPES ---------- */
+const scaleView = { pos: 0, midis: [] };
+function renderScale() {
+  const [lo, hi] = SCALE.positions[scaleView.pos].range;
+  const dots = [];
+  STRINGS.forEach((st, si) => {
+    for (let f = lo; f <= hi; f++) {
+      const pc = (st.midi + f) % 12;
+      if (SCALE.pcs.includes(pc)) dots.push({ s: si, f, midi: st.midi + f, label: NOTES[pc], root: pc === SCALE.root });
+    }
+  });
+  scaleView.midis = [...new Set(dots.map(d => d.midi))].sort((a, b) => a - b);
+  $('#scale-pos').innerHTML = SCALE.positions.map((p, i) => `<button data-pos="${i}" class="${i === scaleView.pos ? 'on' : ''}">${esc(p.label)}</button>`).join('');
+  $('#scale-board').innerHTML = fretboardSVG(null, dots);
+  // the board scrolls sideways on narrow screens: bring the first dot into view
+  const wrap = $('#scale-board').parentElement, first = $('#scale-board .sd');
+  if (first) wrap.scrollLeft = Math.max(0, first.getBoundingClientRect().left - wrap.getBoundingClientRect().left + wrap.scrollLeft - 24);
+}
+$('#scale-pos').addEventListener('click', e => {
+  const b = e.target.closest('button[data-pos]');
+  if (b) { scaleView.pos = +b.dataset.pos; renderScale(); }
+});
+$('#scale-play').addEventListener('click', () => {
+  const up = scaleView.midis, seq = [...up, ...up.slice(0, -1).reverse()];
+  const t0 = audio().currentTime + 0.05;
+  seq.forEach((m, i) => tone(midiToFreq(m), 0.5, 'triangle', 0.2, t0 + i * 0.4));
+});
+
 /* ---------- router ---------- */
 const VIEWS = ['learn', 'chords', 'songs', 'tuner', 'metronome', 'practice', 'fretboard'];
 function route() {
@@ -620,6 +654,7 @@ function route() {
     if (arg) renderSong(arg); else renderSongsList();
   } else if (view === 'chords') renderChords(arg);
   else if (view === 'practice') renderPractice();
+  else if (view === 'fretboard') renderScale();
   if (view !== 'chords' || !arg) if (view !== 'learn') window.scrollTo(0, 0);
 }
 window.addEventListener('hashchange', route);
