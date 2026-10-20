@@ -125,6 +125,19 @@ pre.tab { background: var(--card2); border-radius: 10px; padding: 12px; overflow
 .checks small { display: block; font-size: .85rem; }
 .checks em { color: var(--muted); font-style: normal; font-size: .8rem; margin-left: 4px; }
 
+/* tab clips */
+.sr-only { position: absolute; width: 1px; height: 1px; opacity: 0; overflow: hidden; }
+.file-btn { cursor: pointer; }
+.file-btn:focus-within { outline: 2px solid var(--accent); outline-offset: 2px; }
+.clip { margin: 14px 0 0; }
+.clip-img { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; background: #fff; }
+.clip-img img { display: block; width: 100%; min-width: 700px; height: auto; }
+.clip figcaption { display: flex; gap: 8px; margin-top: 6px; align-items: center; }
+.clip input[type=text] { flex: 1; min-width: 0; font: inherit; color: var(--text); background: var(--card2); border: 1px solid var(--line); border-radius: 10px; padding: 10px; }
+.clip-btns { display: flex; gap: 4px; }
+.clip-btns button { appearance: none; min-width: 44px; min-height: 44px; font: inherit; font-weight: 700; color: var(--text); background: var(--card2); border: 1px solid var(--line); border-radius: 10px; cursor: pointer; }
+.clip-btns button:disabled { opacity: .35; cursor: default; }
+
 /* chords */
 .chord-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 12px; }
 .chord { margin: 0; text-align: center; }

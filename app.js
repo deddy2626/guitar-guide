@@ -225,6 +225,12 @@ function renderSong(id) {
     </div>
     ${s.lead ? `<div class="card prose">${s.lead}</div>` : ''}
     <div class="card">
+      <h3>Your tab clips</h3>
+      <p class="hint">Add screenshots of a tutorial's tab here, in the order you want to learn them. They are saved in this browser on this device only and are never uploaded.</p>
+      <label class="btn file-btn">+ Add images<input type="file" id="clip-input" class="sr-only" accept="image/*" multiple></label>
+      <div id="clip-list" data-song="${esc(s.id)}"></div>
+    </div>
+    <div class="card">
       <h3>Checklist</h3>
       <ul class="checks">${s.checklist.map((t, i) => `<li><label><input type="checkbox" data-i="${i}"${st[i] ? ' checked' : ''}><span>${esc(t)}</span></label></li>`).join('')}</ul>
     </div>`;
@@ -233,9 +239,101 @@ function renderSong(id) {
     cur[+cb.dataset.i] = cb.checked;
     store.set('song:' + id, cur);
   }));
+  renderClips(id);
   window.scrollTo(0, 0);
 }
+/* ---------- TAB CLIPS (images the learner adds; kept in this browser only) ---------- */
+const clipsDB = (() => {
+  let dbp;
+  const open = () => dbp ||= new Promise((resolve, reject) => {
+    const req = indexedDB.open('fretwise', 1);
+    req.onupgradeneeded = () => req.result.createObjectStore('clips', { keyPath: 'id', autoIncrement: true });
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+  });
+  const run = async (mode, fn) => {
+    const db = await open();
+    return new Promise((resolve, reject) => {
+      const t = db.transaction('clips', mode);
+      const req = fn(t.objectStore('clips'));
+      t.oncomplete = () => resolve(req && req.result);
+      t.onerror = t.onabort = () => reject(t.error);
+    });
+  };
+  return {
+    all: async song => ((await run('readonly', st => st.getAll())) || []).filter(c => c.song === song).sort((a, b) => a.order - b.order),
+    add: rec => run('readwrite', st => st.add(rec)),
+    put: rec => run('readwrite', st => st.put(rec)),
+    del: id => run('readwrite', st => st.delete(id)),
+  };
+})();
+let clipUrls = [];
+async function renderClips(song) {
+  const box = $('#clip-list');
+  if (!box) return;
+  let clips;
+  try { clips = await clipsDB.all(song); }
+  catch { box.innerHTML = '<p class="hint">Saving images isn\'t available in this browser (private mode?).</p>'; return; }
+  if (box.dataset.song !== song) return;
+  clipUrls.forEach(u => URL.revokeObjectURL(u));
+  clipUrls = [];
+  box.innerHTML = clips.length ? clips.map((c, i) => {
+    const url = URL.createObjectURL(c.blob);
+    clipUrls.push(url);
+    return `<figure class="clip" data-id="${c.id}">
+      <div class="clip-img"><a href="${url}" target="_blank" rel="noopener"><img src="${url}" alt="Tab clip ${i + 1}"></a></div>
+      <figcaption>
+        <input type="text" value="${esc(c.caption)}" maxlength="60" placeholder="e.g. 0:06 intro" aria-label="Caption for clip ${i + 1}">
+        <span class="clip-btns">
+          <button data-act="up" aria-label="Move up"${i === 0 ? ' disabled' : ''}>↑</button>
+          <button data-act="down" aria-label="Move down"${i === clips.length - 1 ? ' disabled' : ''}>↓</button>
+          <button data-act="del" aria-label="Delete clip">✕</button>
+        </span>
+      </figcaption>
+    </figure>`;
+  }).join('') : '<p class="hint">Nothing here yet.</p>';
+}
+async function clipAction(song, id, act) {
+  try {
+    const clips = await clipsDB.all(song), i = clips.findIndex(c => c.id === id);
+    if (i < 0) return;
+    if (act === 'del') {
+      if (!confirm('Remove this clip?')) return;
+      await clipsDB.del(id);
+    } else {
+      const j = act === 'up' ? i - 1 : i + 1;
+      if (j < 0 || j >= clips.length) return;
+      [clips[i].order, clips[j].order] = [clips[j].order, clips[i].order];
+      await clipsDB.put(clips[i]);
+      await clipsDB.put(clips[j]);
+    }
+  } catch { /* storage unavailable */ }
+  renderClips(song);
+}
+$('#songs-detail').addEventListener('change', async e => {
+  const box = $('#clip-list'), song = box && box.dataset.song;
+  if (!song) return;
+  if (e.target.id === 'clip-input') {
+    const files = [...e.target.files].filter(f => f.type.startsWith('image/'));
+    e.target.value = '';
+    try {
+      const existing = await clipsDB.all(song);
+      let order = existing.length ? existing[existing.length - 1].order + 1 : 0;
+      for (const f of files) await clipsDB.add({ song, order: order++, caption: '', blob: f });
+    } catch { /* storage unavailable */ }
+    renderClips(song);
+  } else if (e.target.matches('.clip input[type=text]')) {
+    const id = +e.target.closest('.clip').dataset.id, value = e.target.value;
+    try {
+      const rec = (await clipsDB.all(song)).find(c => c.id === id);
+      if (rec) { rec.caption = value; await clipsDB.put(rec); }
+    } catch { /* storage unavailable */ }
+  }
+});
+
 $('#songs-detail').addEventListener('click', e => {
+  const act = e.target.closest('.clip button[data-act]');
+  if (act) { clipAction($('#clip-list').dataset.song, +act.closest('.clip').dataset.id, act.dataset.act); return; }
   const hear = e.target.closest('button[data-hear]');
   if (hear) {
     const s = SONGS.find(x => x.id === hear.dataset.hear);
